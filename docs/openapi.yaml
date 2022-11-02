@@ -1,0 +1,183 @@
+openapi: '3.0.1'
+info:
+  description: 'Mistho Glassdoor Resume Docs'
+  version: '1.0.0'
+  title: 'Mistho Glassdoor Resume Docs'
+  contact:
+    email: 'dzirloappz@gmail.com'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: apiKey
+
+servers:
+  - url: http://localhost:8080/
+    description: Development server
+
+paths:
+  '/api/cv':
+    post:
+      summary: 'Submit email and password'
+      description: ''
+      security:
+        - ApiKeyAuth: []
+      operationId: 'submitJob'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+                - email
+              properties:
+                email:
+                  type: string
+                  example: 'test@gmail.com'
+                password:
+                  type: string
+                  example: 'pass'
+      responses:
+        '400':
+          description: 'missing parameters'
+        '404':
+          description: 'wrong password or username'
+        '200':
+          description: 'Job enqueud'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'job enqued'
+                  id:
+                    type: string
+                    example: '4t4lkjtwl445kl'
+        '500':
+          description: 'Server error'
+  '/api/cv/{id}':
+    get:
+      summary: 'download CV by providing job ID'
+      description: ''
+      operationId: 'getCV'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'job id obtained when job submitted'
+          required: true
+          schema:
+            type: string
+      responses:
+        '404':
+          description: 'File not found. Job not finished.'
+        '200':
+          description: 'PDF file'
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: 'Server error'
+  '/api/job/{id}':
+    get:
+      summary: 'get Mongo DB data about CV'
+      description: ''
+      operationId: 'getCVData'
+      parameters:
+        - in: 'path'
+          name: 'id'
+          description: 'job id obtained when job submitted'
+          required: true
+          schema:
+            type: string
+      responses:
+        '404':
+          description: 'no data found for ID'
+        '200':
+          description: 'Resume mongoDb data'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    resumeID:
+                      type: string
+                    firstname:
+                      type: string
+                    lastname:
+                      type: string
+                    email:
+                      type: string
+                    profession:
+                      type: string
+                    about:
+                      type: string
+                    experiences:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          position:
+                            type: string
+                          company:
+                            type: string
+                          location:
+                            type: string
+                          period:
+                            type: string
+                          description:
+                            type: string
+                          _id:
+                            type: string
+                    skills:
+                      type: array
+                      items:
+                        type: string
+                    certs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          company:
+                            type: string
+                          period:
+                            type: string
+                          description:
+                            type: string
+                          _id:
+                            type: string
+                    education:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          degree:
+                            type: string
+                          location:
+                            type: string
+                          period:
+                            type: string
+                          description:
+                            type: string
+                          _id:
+                            type: string
+                    fileUrl:
+                      type: string
+                      example: 'http://localhost:8080/api/cv/wbf6g5AtXVMddpyVtpSjza'
+        '500':
+          description: 'Server error'
