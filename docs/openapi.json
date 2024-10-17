@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "description": "Mistho Glassdoor Resume Docs",
+    "description": "Glassdoor Resume Docs",
     "version": "1.0.0",
-    "title": "Mistho Glassdoor Resume Docs",
+    "title": "Glassdoor Resume Docs",
     "contact": {
       "email": "dzirloappz@gmail.com"
     }
